@@ -45,6 +45,41 @@ const userData = {
 
 const Profile = () => {
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
+  
+  // Photo dialog for enlarged view
+  const renderPhotoDialog = () => {
+    return (
+      <Dialog
+        open={openPhotoDialog}
+        onClose={() => setOpenPhotoDialog(false)}
+        maxWidth="md"
+      >
+        <DialogTitle>
+          {userData.name}'s Profile Photo
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenPhotoDialog(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            &times;
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <img 
+              src={userData.photo} 
+              alt={userData.name} 
+              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  };
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
@@ -268,41 +303,6 @@ const Profile = () => {
       {renderPhotoDialog()}
     </Container>
   );
-
-  // Photo dialog for enlarged view
-  const renderPhotoDialog = () => {
-    return (
-      <Dialog
-        open={openPhotoDialog}
-        onClose={() => setOpenPhotoDialog(false)}
-        maxWidth="md"
-      >
-        <DialogTitle>
-          {userData.name}'s Profile Photo
-          <IconButton
-            aria-label="close"
-            onClick={() => setOpenPhotoDialog(false)}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-            }}
-          >
-            &times;
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ textAlign: 'center' }}>
-            <img 
-              src={userData.photo} 
-              alt={userData.name} 
-              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
-            />
-          </Box>
-        </DialogContent>
-      </Dialog>
-    );
-  };
 };
 
 export default Profile;
