@@ -25,6 +25,10 @@ import {
   Switch,
   FormControlLabel,
   Tooltip,
+  Slider,
+  TextField,
+  InputAdornment,
+  Badge,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@mui/icons-material/Close';
@@ -44,6 +48,7 @@ const nearbyProfessionals = [
     interests: ['Fintech', 'Blockchain', 'AI'],
     company: 'FinTech Innovations',
     matchScore: 85,
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
     id: 2,
@@ -53,6 +58,7 @@ const nearbyProfessionals = [
     interests: ['UX Design', 'Product Management', 'User Research'],
     company: 'Design Forward',
     matchScore: 78,
+    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
     id: 3,
@@ -62,6 +68,7 @@ const nearbyProfessionals = [
     interests: ['Machine Learning', 'AI', 'Data Science'],
     company: 'AI Solutions',
     matchScore: 92,
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
 ];
 
@@ -94,6 +101,8 @@ const ProximityDemo = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [notification, setNotification] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
   const [beaconMode, setBeaconMode] = useState(false);
@@ -183,6 +192,41 @@ const ProximityDemo = () => {
     setBeaconMode(!beaconMode);
     setIsScanning(false);
     setDiscoveredProfessionals([]);
+  };
+
+  // Photo dialog for enlarged view
+  const renderPhotoDialog = () => {
+    return (
+      <Dialog
+        open={openPhotoDialog}
+        onClose={() => setOpenPhotoDialog(false)}
+        maxWidth="md"
+      >
+        <DialogTitle>
+          Profile Photo
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenPhotoDialog(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            &times;
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <img 
+              src={selectedPhoto} 
+              alt="Profile" 
+              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    );
   };
 
   return (
@@ -308,9 +352,25 @@ const ProximityDemo = () => {
                   >
                     <CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                          <PersonIcon />
-                        </Avatar>
+                        <Avatar 
+                          sx={{ 
+                            mr: 2, 
+                            width: 56, 
+                            height: 56, 
+                            border: '2px solid #3f51b5',
+                            cursor: 'pointer',
+                            '&:hover': {
+                              boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+                            }
+                          }}
+                          src={professional.photo}
+                          alt={professional.name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPhoto(professional.photo);
+                            setOpenPhotoDialog(true);
+                          }}
+                        />
                         <Box>
                           <Typography variant="h6" component="div">
                             {professional.name}
@@ -519,9 +579,24 @@ const ProximityDemo = () => {
           <>
             <DialogTitle>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                  <PersonIcon />
-                </Avatar>
+                <Avatar 
+                  sx={{ 
+                    mr: 2, 
+                    width: 56, 
+                    height: 56, 
+                    border: '2px solid #3f51b5',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+                    }
+                  }}
+                  src={selectedProfessional.photo}
+                  alt={selectedProfessional.name}
+                  onClick={() => {
+                    setSelectedPhoto(selectedProfessional.photo);
+                    setOpenPhotoDialog(true);
+                  }}
+                />
                 <Box>
                   {selectedProfessional.name}
                   <Typography variant="body2" color="text.secondary">
@@ -628,6 +703,7 @@ const ProximityDemo = () => {
           {notification?.message}
         </Alert>
       </Snackbar>
+      {renderPhotoDialog()}
     </Container>
   );
 };

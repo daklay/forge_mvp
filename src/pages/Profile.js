@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -17,6 +17,10 @@ import {
   ListItemText,
   Switch,
   FormControlLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -36,10 +40,11 @@ const userData = {
   interests: ['AI', 'Machine Learning', 'Computer Vision', 'Neural Networks', 'Data Science'],
   connections: 24,
   events: 5,
-  photo: null, // In a real app, this would be a URL to the user's photo
+  photo: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80', // URL to the user's photo
 };
 
 const Profile = () => {
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
@@ -48,11 +53,19 @@ const Profile = () => {
           <Paper elevation={3} sx={{ p: 3, height: '100%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Avatar
-                sx={{ width: 120, height: 120, mb: 2 }}
+                sx={{ 
+                  width: 120, 
+                  height: 120, 
+                  mb: 2,
+                  cursor: 'pointer',
+                  '&:hover': {
+                    boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+                  }
+                }}
                 alt={userData.name}
-              >
-                {!userData.photo && <PersonIcon sx={{ fontSize: 80 }} />}
-              </Avatar>
+                src={userData.photo}
+                onClick={() => setOpenPhotoDialog(true)}
+              />
               <Typography variant="h5" component="h1" gutterBottom>
                 {userData.name}
               </Typography>
@@ -252,8 +265,44 @@ const Profile = () => {
           </Paper>
         </Grid>
       </Grid>
+      {renderPhotoDialog()}
     </Container>
   );
+
+  // Photo dialog for enlarged view
+  const renderPhotoDialog = () => {
+    return (
+      <Dialog
+        open={openPhotoDialog}
+        onClose={() => setOpenPhotoDialog(false)}
+        maxWidth="md"
+      >
+        <DialogTitle>
+          {userData.name}'s Profile Photo
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenPhotoDialog(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            &times;
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <img 
+              src={userData.photo} 
+              alt={userData.name} 
+              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  };
 };
 
 export default Profile;

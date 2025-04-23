@@ -24,6 +24,10 @@ import {
   Alert,
   Tooltip,
   Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import MapIcon from '@mui/icons-material/Map';
@@ -43,6 +47,7 @@ const mapProfessionals = [
     position: [51.505, -0.09], // Example coordinates
     interests: ['Fintech', 'Blockchain', 'AI'],
     company: 'FinTech Innovations',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
     id: 2,
@@ -51,6 +56,7 @@ const mapProfessionals = [
     position: [51.507, -0.087],
     interests: ['UX Design', 'Product Management', 'User Research'],
     company: 'Design Forward',
+    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
     id: 3,
@@ -59,6 +65,7 @@ const mapProfessionals = [
     position: [51.503, -0.093],
     interests: ['Machine Learning', 'AI', 'Data Science'],
     company: 'AI Solutions',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
     id: 4,
@@ -67,6 +74,7 @@ const mapProfessionals = [
     position: [51.506, -0.095],
     interests: ['Data Science', 'AI', 'Statistics'],
     company: 'Data Insights',
+    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80',
   },
   {
     id: 5,
@@ -75,6 +83,7 @@ const mapProfessionals = [
     position: [51.504, -0.088],
     interests: ['Blockchain', 'Cryptocurrency', 'Smart Contracts'],
     company: 'Blockchain Solutions',
+    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
 ];
 
@@ -135,6 +144,8 @@ const MapView = () => {
   const [expertiseFilter, setExpertiseFilter] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState([51.505, -0.09]); // Default center (London)
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   // Filter professionals based on expertise
   const filteredProfessionals = mapProfessionals.filter(
@@ -231,9 +242,32 @@ const MapView = () => {
                   icon={createCustomIcon('#3f51b5')}
                 >
                   <Popup>
-                    <Typography variant="subtitle1">{professional.name}</Typography>
-                    <Typography variant="body2">{professional.expertise}</Typography>
-                    <Typography variant="body2">{professional.company}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Avatar 
+                        src={professional.photo} 
+                        alt={professional.name} 
+                        sx={{ 
+                          width: 50, 
+                          height: 50, 
+                          mr: 2, 
+                          border: '2px solid #3f51b5',
+                          cursor: 'pointer',
+                          '&:hover': {
+                            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+                          }
+                        }} 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPhoto(professional.photo);
+                          setOpenPhotoDialog(true);
+                        }}
+                      />
+                      <Box>
+                        <Typography variant="subtitle1">{professional.name}</Typography>
+                        <Typography variant="body2">{professional.expertise}</Typography>
+                        <Typography variant="body2">{professional.company}</Typography>
+                      </Box>
+                    </Box>
                     <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                       {professional.interests.map((interest) => (
                         <Chip
@@ -328,9 +362,24 @@ const MapView = () => {
                           onClick={() => setMapCenter(professional.position)}
                         >
                           <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: 'primary.main' }}>
-                              <PersonIcon />
-                            </Avatar>
+                            <Avatar 
+                              src={professional.photo}
+                              alt={professional.name}
+                              sx={{ 
+                                width: 40, 
+                                height: 40,
+                                border: '1px solid #3f51b5',
+                                cursor: 'pointer',
+                                '&:hover': {
+                                  boxShadow: '0 0 5px rgba(0,0,0,0.2)',
+                                }
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedPhoto(professional.photo);
+                                setOpenPhotoDialog(true);
+                              }}
+                            />
                           </ListItemAvatar>
                           <ListItemText
                             primary={professional.name}
@@ -566,6 +615,36 @@ const MapView = () => {
           </Grid>
         </Grid>
       </Paper>
+      {/* Photo dialog for enlarged view */}
+      <Dialog
+        open={openPhotoDialog}
+        onClose={() => setOpenPhotoDialog(false)}
+        maxWidth="md"
+      >
+        <DialogTitle>
+          Profile Photo
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenPhotoDialog(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            &times;
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <img 
+              src={selectedPhoto} 
+              alt="Profile" 
+              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };

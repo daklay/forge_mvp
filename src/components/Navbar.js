@@ -13,10 +13,19 @@ import {
   Tooltip,
   MenuItem,
   Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
+
+// Mock user data with profile image
+const currentUser = {
+  name: 'Alex Johnson',
+  photo: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+};
 
 const pages = [
   { title: 'Home', path: '/' },
@@ -28,6 +37,7 @@ const pages = [
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   const [anchorElNotifications, setAnchorElNotifications] = useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -61,10 +71,45 @@ const Navbar = () => {
     { id: 3, message: 'New connection request from Sarah (UX Designer)' },
   ];
 
+  const renderPhotoDialog = () => {
+    return (
+      <Dialog
+        open={openPhotoDialog}
+        onClose={() => setOpenPhotoDialog(false)}
+        maxWidth="md"
+      >
+        <DialogTitle>
+          {currentUser.name}'s Profile Photo
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenPhotoDialog(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            &times;
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <img 
+              src={currentUser.photo} 
+              alt={currentUser.name} 
+              style={{ maxWidth: '100%', maxHeight: '70vh', borderRadius: '4px' }} 
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <>
+      <AppBar position="static">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
           {/* Logo for larger screens */}
           <Typography
             variant="h6"
@@ -197,12 +242,50 @@ const Navbar = () => {
 
           {/* User menu */}
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
-              </IconButton>
+            <Tooltip title="View profile or click avatar to see full photo">
+              <Box sx={{ display: 'flex' }}>
+                <IconButton 
+                  sx={{ p: 0 }}
+                  onClick={(e) => {
+                    // Stop propagation to prevent the menu from opening
+                    e.stopPropagation();
+                    setOpenPhotoDialog(true);
+                  }}
+                >
+                  <Avatar 
+                    src={currentUser.photo}
+                    alt={currentUser.name}
+                    sx={{ 
+                      width: 40, 
+                      height: 40,
+                      border: '2px solid white',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        boxShadow: '0 0 10px rgba(255,255,255,0.5)',
+                      }
+                    }}
+                  />
+                </IconButton>
+                <IconButton 
+                  onClick={handleOpenUserMenu} 
+                  sx={{ p: 0, ml: 1 }}
+                >
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    width: 16, 
+                    height: 16, 
+                    borderRadius: '50%',
+                    bgcolor: 'white',
+                    color: 'primary.main',
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                  }}>
+                    ▼
+                  </Box>
+                </IconButton>
+              </Box>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
@@ -239,9 +322,11 @@ const Navbar = () => {
               </MenuItem>
             </Menu>
           </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      {renderPhotoDialog()}
+    </>
   );
 };
 
