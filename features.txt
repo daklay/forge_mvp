@@ -1,0 +1,17 @@
+ill give you the idea i want to build first of all what i want is just an mvp so the idea is a networking app for conferences, meetups, and professional events that helps attendees discover relevant people nearby using proximity tech, live maps, and interest-matching algorithms.
+
+1. User Registration & Profiles
+
+Sign-Up Flow:
+Users register with name, job title, company, and expertise (e.g., "AI Engineer," "Startup Founder").
+Tags for interests (e.g., "Quantum Computing," "Sustainability").
+Optional: LinkedIn/GitHub integration, profile photo.
+Privacy Settings:
+Toggle visibility: "Show my name," "Show only my expertise," "Go anonymous."
+Opt-in to share location continuously, only when app is open, or never.
+
+
+so we want it as a mobile app with react native and expo but since this is just an mvp you create it as a website responsive the just for demo with fake data just showing the prosess 
+
+so build a modern and clean website responsive
+it will be static since this is just an mvp so we just want something to pitch

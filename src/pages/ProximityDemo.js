@@ -1,0 +1,635 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Container,
+  Typography,
+  Paper,
+  Grid,
+  Card,
+  CardContent,
+  Avatar,
+  Button,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  Alert,
+  IconButton,
+  Snackbar,
+  Switch,
+  FormControlLabel,
+  Tooltip,
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import BluetoothIcon from '@mui/icons-material/Bluetooth';
+import BluetoothSearchingIcon from '@mui/icons-material/BluetoothSearching';
+import InfoIcon from '@mui/icons-material/Info';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+// Mock data for nearby professionals
+const nearbyProfessionals = [
+  {
+    id: 1,
+    name: 'Alex Chen',
+    expertise: 'Fintech Expert',
+    distance: '15m away',
+    interests: ['Fintech', 'Blockchain', 'AI'],
+    company: 'FinTech Innovations',
+    matchScore: 85,
+  },
+  {
+    id: 2,
+    name: 'Sarah Williams',
+    expertise: 'UX Designer',
+    distance: '22m away',
+    interests: ['UX Design', 'Product Management', 'User Research'],
+    company: 'Design Forward',
+    matchScore: 78,
+  },
+  {
+    id: 3,
+    name: 'Michael Johnson',
+    expertise: 'ML Engineer',
+    distance: '8m away',
+    interests: ['Machine Learning', 'AI', 'Data Science'],
+    company: 'AI Solutions',
+    matchScore: 92,
+  },
+];
+
+// Mock data for venue beacons
+const venueBeacons = [
+  {
+    id: 1,
+    name: 'AI Stage',
+    professionals: 15,
+    expertise: 'ML Engineers',
+    location: 'Main Hall - East',
+  },
+  {
+    id: 2,
+    name: 'Startup Zone',
+    professionals: 23,
+    expertise: 'Founders & VCs',
+    location: 'Exhibition Area',
+  },
+  {
+    id: 3,
+    name: 'Design Corner',
+    professionals: 8,
+    expertise: 'UX/UI Designers',
+    location: 'Workshop Room 2',
+  },
+];
+
+const ProximityDemo = () => {
+  const [isScanning, setIsScanning] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [beaconMode, setBeaconMode] = useState(false);
+  const [discoveredProfessionals, setDiscoveredProfessionals] = useState([]);
+
+  // Simulate BLE scanning
+  useEffect(() => {
+    let scanTimer;
+    let notificationTimer;
+    
+    if (isScanning) {
+      // Simulate discovering professionals over time
+      scanTimer = setTimeout(() => {
+        // Add first professional after 2 seconds
+        setDiscoveredProfessionals([nearbyProfessionals[0]]);
+        
+        // Show notification
+        setNotification({
+          professional: nearbyProfessionals[0],
+          message: `${nearbyProfessionals[0].name} (${nearbyProfessionals[0].expertise}) is nearby!`,
+        });
+        setShowNotification(true);
+        
+        // Add second professional after 5 seconds
+        setTimeout(() => {
+          setDiscoveredProfessionals(prev => [...prev, nearbyProfessionals[1]]);
+          
+          // Show notification
+          setNotification({
+            professional: nearbyProfessionals[1],
+            message: `${nearbyProfessionals[1].name} (${nearbyProfessionals[1].expertise}) is nearby!`,
+          });
+          setShowNotification(true);
+          
+          // Add third professional after 8 seconds
+          setTimeout(() => {
+            setDiscoveredProfessionals(prev => [...prev, nearbyProfessionals[2]]);
+            
+            // Show notification
+            setNotification({
+              professional: nearbyProfessionals[2],
+              message: `${nearbyProfessionals[2].name} (${nearbyProfessionals[2].expertise}) is nearby!`,
+            });
+            setShowNotification(true);
+          }, 3000);
+        }, 3000);
+      }, 2000);
+    } else {
+      setDiscoveredProfessionals([]);
+    }
+    
+    return () => {
+      clearTimeout(scanTimer);
+      clearTimeout(notificationTimer);
+    };
+  }, [isScanning]);
+
+  const handleStartScanning = () => {
+    setIsScanning(true);
+  };
+
+  const handleStopScanning = () => {
+    setIsScanning(false);
+  };
+
+  const handleOpenProfile = (professional) => {
+    setSelectedProfessional(professional);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+  };
+
+  const handleNotificationClick = () => {
+    if (notification && notification.professional) {
+      handleOpenProfile(notification.professional);
+      setShowNotification(false);
+    }
+  };
+
+  const handleToggleMode = () => {
+    setBeaconMode(!beaconMode);
+    setIsScanning(false);
+    setDiscoveredProfessionals([]);
+  };
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        Proximity-Based Networking
+      </Typography>
+      <Typography variant="body1" paragraph align="center" color="text.secondary" sx={{ mb: 4 }}>
+        Discover relevant professionals nearby using Bluetooth Low Energy technology
+      </Typography>
+
+      {/* Mode Toggle */}
+      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+        <Grid container alignItems="center" spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6">
+              {beaconMode ? 'Venue Beacon Mode' : 'Device-to-Device Mode'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {beaconMode 
+                ? 'Discover zones and professionals in specific areas of the venue' 
+                : 'Discover other attendees directly when they are within range'}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={beaconMode}
+                  onChange={handleToggleMode}
+                  color="primary"
+                />
+              }
+              label={beaconMode ? "Venue Beacon Mode" : "Device-to-Device Mode"}
+            />
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Device-to-Device Mode */}
+      {!beaconMode && (
+        <>
+          {/* Control Panel */}
+          <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} sm={7}>
+                <Typography variant="h6" gutterBottom>
+                  <BluetoothIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
+                  BLE Scanning Status
+                </Typography>
+                <Typography variant="body2" paragraph>
+                  {isScanning 
+                    ? 'Actively scanning for professionals with matching interests nearby...' 
+                    : 'Scanning is currently paused. Start scanning to discover nearby professionals.'}
+                </Typography>
+                {isScanning && (
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box
+                      sx={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: '50%',
+                        bgcolor: 'success.main',
+                        mr: 1,
+                        animation: 'pulse 2s infinite',
+                      }}
+                    />
+                    <Typography variant="body2" color="success.main">
+                      Broadcasting your profile to nearby devices
+                    </Typography>
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={5} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
+                {!isScanning ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<BluetoothSearchingIcon />}
+                    onClick={handleStartScanning}
+                    size="large"
+                  >
+                    Start Scanning
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleStopScanning}
+                    size="large"
+                  >
+                    Stop Scanning
+                  </Button>
+                )}
+              </Grid>
+            </Grid>
+          </Paper>
+
+          {/* Discovered Professionals */}
+          <Typography variant="h6" gutterBottom>
+            Nearby Professionals
+          </Typography>
+          {discoveredProfessionals.length === 0 ? (
+            <Alert severity="info" sx={{ mb: 4 }}>
+              {isScanning 
+                ? 'Scanning for nearby professionals... This may take a moment.' 
+                : 'Start scanning to discover nearby professionals.'}
+            </Alert>
+          ) : (
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+              {discoveredProfessionals.map((professional) => (
+                <Grid item xs={12} sm={6} md={4} key={professional.id}>
+                  <Card 
+                    elevation={3} 
+                    sx={{ 
+                      height: '100%',
+                      transition: 'transform 0.3s, box-shadow 0.3s',
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: 6,
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                          <PersonIcon />
+                        </Avatar>
+                        <Box>
+                          <Typography variant="h6" component="div">
+                            {professional.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {professional.expertise}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <Chip 
+                          icon={<LocationOnIcon />} 
+                          label={professional.distance} 
+                          size="small" 
+                          color="primary" 
+                          variant="outlined" 
+                        />
+                        <Chip 
+                          label={`${professional.matchScore}% Match`} 
+                          size="small" 
+                          color={professional.matchScore > 80 ? "success" : "primary"} 
+                        />
+                      </Box>
+                      
+                      <Typography variant="body2" sx={{ mb: 1 }}>
+                        <b>Company:</b> {professional.company}
+                      </Typography>
+                      
+                      <Typography variant="body2" sx={{ mb: 1 }}>
+                        <b>Interests:</b>
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
+                        {professional.interests.map((interest) => (
+                          <Chip
+                            key={interest}
+                            label={interest}
+                            size="small"
+                            variant="outlined"
+                          />
+                        ))}
+                      </Box>
+                      
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={() => handleOpenProfile(professional)}
+                      >
+                        View Profile
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </>
+      )}
+
+      {/* Venue Beacon Mode */}
+      {beaconMode && (
+        <>
+          <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} sm={7}>
+                <Typography variant="h6" gutterBottom>
+                  <LocationOnIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
+                  Venue Beacon Detection
+                </Typography>
+                <Typography variant="body2" paragraph>
+                  {isScanning 
+                    ? 'Scanning for venue beacons... You will be notified when entering a beacon zone.' 
+                    : 'Start scanning to detect venue beacons and zones.'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={5} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
+                {!isScanning ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<BluetoothSearchingIcon />}
+                    onClick={handleStartScanning}
+                    size="large"
+                  >
+                    Start Scanning
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleStopScanning}
+                    size="large"
+                  >
+                    Stop Scanning
+                  </Button>
+                )}
+              </Grid>
+            </Grid>
+          </Paper>
+
+          <Typography variant="h6" gutterBottom>
+            Venue Zones
+          </Typography>
+          {!isScanning ? (
+            <Alert severity="info" sx={{ mb: 4 }}>
+              Start scanning to discover venue zones and beacons.
+            </Alert>
+          ) : (
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+              {venueBeacons.map((beacon) => (
+                <Grid item xs={12} sm={6} md={4} key={beacon.id}>
+                  <Card 
+                    elevation={3} 
+                    sx={{ 
+                      height: '100%',
+                      transition: 'transform 0.3s, box-shadow 0.3s',
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: 6,
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6" component="div" gutterBottom>
+                        {beacon.name}
+                      </Typography>
+                      
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <LocationOnIcon color="primary" sx={{ mr: 1 }} />
+                        <Typography variant="body2" color="text.secondary">
+                          {beacon.location}
+                        </Typography>
+                      </Box>
+                      
+                      <Alert severity="info" sx={{ mb: 2 }}>
+                        <Typography variant="body2">
+                          <b>{beacon.professionals}</b> {beacon.expertise} are in this area
+                        </Typography>
+                      </Alert>
+                      
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        Explore Zone
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </>
+      )}
+
+      {/* How It Works */}
+      <Paper elevation={3} sx={{ p: 3, mt: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          <InfoIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
+          How Proximity Networking Works
+        </Typography>
+        
+        <Grid container spacing={3} sx={{ mt: 1 }}>
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" gutterBottom>
+              Device-to-Device Mode
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • Phones act as BLE "beacons" to broadcast user expertise
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • When two users with matching interests are within 10–30 meters, both get a notification
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • Users can ignore or send a "virtual handshake" to connect
+            </Typography>
+          </Grid>
+          
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" gutterBottom>
+              Venue Beacon Mode
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • Event organizers place physical BLE beacons in zones
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • When a user enters a beacon's range, the app triggers a notification
+            </Typography>
+            <Typography variant="body2" paragraph>
+              • Users can see how many professionals with specific expertise are in each zone
+            </Typography>
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Professional Profile Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        {selectedProfessional && (
+          <>
+            <DialogTitle>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                  <PersonIcon />
+                </Avatar>
+                <Box>
+                  {selectedProfessional.name}
+                  <Typography variant="body2" color="text.secondary">
+                    {selectedProfessional.expertise}
+                  </Typography>
+                </Box>
+              </Box>
+            </DialogTitle>
+            <DialogContent dividers>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Company</Typography>
+                  <Typography variant="body1" paragraph>
+                    {selectedProfessional.company}
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Interests</Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
+                    {selectedProfessional.interests.map((interest) => (
+                      <Chip
+                        key={interest}
+                        label={interest}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                      />
+                    ))}
+                  </Box>
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Match Details</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Box
+                      sx={{
+                        width: `${selectedProfessional.matchScore}%`,
+                        height: 8,
+                        bgcolor: 'primary.main',
+                        borderRadius: 1,
+                      }}
+                    />
+                    <Typography variant="body2" sx={{ ml: 2 }}>
+                      {selectedProfessional.matchScore}% Match
+                    </Typography>
+                  </Box>
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Common Interests</Typography>
+                  <Typography variant="body2" paragraph>
+                    You both share interests in {selectedProfessional.interests.join(', ')}.
+                  </Typography>
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="inherit">
+                Close
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CheckIcon />}
+                autoFocus
+              >
+                Send Handshake
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={showNotification}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          severity="info"
+          sx={{ width: '100%' }}
+          action={
+            <>
+              <Button 
+                color="inherit" 
+                size="small" 
+                onClick={handleNotificationClick}
+              >
+                VIEW
+              </Button>
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={handleCloseNotification}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </>
+          }
+        >
+          {notification?.message}
+        </Alert>
+      </Snackbar>
+    </Container>
+  );
+};
+
+export default ProximityDemo;
