@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ProximityDemo from './pages/ProximityDemo';
 import MapView from './pages/MapView';
+import Events from './pages/Events';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/proximity" element={<ProximityDemo />} />
             <Route path="/map" element={<MapView />} />
+            <Route path="/events" element={<Events />} />
           </Routes>
         </Box>
         <Footer />

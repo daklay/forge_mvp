@@ -20,6 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 const pages = [
   { title: 'Home', path: '/' },
+  { title: 'Events', path: '/events' },
   { title: 'Proximity Demo', path: '/proximity' },
   { title: 'Live Map', path: '/map' },
 ];
