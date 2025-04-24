@@ -127,7 +127,7 @@ const Events = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredEvents, setFilteredEvents] = useState(upcomingEvents);
 
-  const steps = ['Event Details', 'Attendee Information', 'Payment'];
+  const steps = ['Event Details', 'What are you looking for?', 'Payment'];
 
   const handleOpenDialog = (event) => {
     setSelectedEvent(event);
@@ -242,57 +242,82 @@ const Events = () => {
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
-              Attendee Information
+              What are you looking for?
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  required
-                  label="First Name"
+                  label="I'm looking for..."
                   fullWidth
                   variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  label="Last Name"
-                  fullWidth
-                  variant="outlined"
+                  multiline
+                  rows={4}
+                  placeholder="E.g., Potential collaborators, job opportunities, mentorship, investment partners, etc."
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  label="Email"
-                  fullWidth
-                  variant="outlined"
-                  type="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Company"
-                  fullWidth
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Job Title"
-                  fullWidth
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox color="primary" />}
-                  label="I agree to share my profile information with other attendees"
-                />
+                <Typography variant="body2" color="text.secondary">
+                  This information helps us connect you with the right people at the event.
+                </Typography>
               </Grid>
             </Grid>
           </Box>
         );
+      // case 2:
+      //   return (
+      //     <Box>
+      //       <Typography variant="h6" gutterBottom>
+      //         Attendee Information
+      //       </Typography>
+      //       <Grid container spacing={2}>
+      //         <Grid item xs={12} sm={6}>
+      //           <TextField
+      //             required
+      //             label="First Name"
+      //             fullWidth
+      //             variant="outlined"
+      //           />
+      //         </Grid>
+      //         <Grid item xs={12} sm={6}>
+      //           <TextField
+      //             required
+      //             label="Last Name"
+      //             fullWidth
+      //             variant="outlined"
+      //           />
+      //         </Grid>
+      //         <Grid item xs={12}>
+      //           <TextField
+      //             required
+      //             label="Email"
+      //             fullWidth
+      //             variant="outlined"
+      //             type="email"
+      //           />
+      //         </Grid>
+      //         <Grid item xs={12}>
+      //           <TextField
+      //             label="Company"
+      //             fullWidth
+      //             variant="outlined"
+      //           />
+      //         </Grid>
+      //         <Grid item xs={12}>
+      //           <TextField
+      //             label="Job Title"
+      //             fullWidth
+      //             variant="outlined"
+      //           />
+      //         </Grid>
+      //         <Grid item xs={12}>
+      //           <FormControlLabel
+      //             control={<Checkbox color="primary" />}
+      //             label="I agree to share my profile information with other attendees"
+      //           />
+      //         </Grid>
+      //       </Grid>
+      //     </Box>
+      //   );
       case 2:
         return (
           <Box>
