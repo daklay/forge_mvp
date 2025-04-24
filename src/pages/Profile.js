@@ -33,7 +33,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 // Mock user data
 const userData = {
-  name: 'Alex Johnson',
+  name: 'Ali Essaghir',
   jobTitle: 'AI Engineer',
   company: 'TechInnovate',
   expertise: 'Machine learning algorithms and neural networks with focus on computer vision applications',

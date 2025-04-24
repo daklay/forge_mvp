@@ -38,6 +38,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
+
 // Mock data for professionals on the map
 const mapProfessionals = [
   {
@@ -47,6 +48,7 @@ const mapProfessionals = [
     position: [51.505, -0.09], // Example coordinates
     interests: ['Fintech', 'Blockchain', 'AI'],
     company: 'FinTech Innovations',
+    distance: '5m',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -56,6 +58,7 @@ const mapProfessionals = [
     position: [51.507, -0.087],
     interests: ['UX Design', 'Product Management', 'User Research'],
     company: 'Design Forward',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -65,6 +68,7 @@ const mapProfessionals = [
     position: [51.503, -0.093],
     interests: ['Machine Learning', 'AI', 'Data Science'],
     company: 'AI Solutions',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -74,6 +78,7 @@ const mapProfessionals = [
     position: [51.506, -0.088],
     interests: ['Data Science', 'AI', 'Statistics'],
     company: 'Data Insights',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80',
   },
   {
@@ -83,6 +88,7 @@ const mapProfessionals = [
     position: [51.505, -0.089],
     interests: ['Blockchain', 'Cryptocurrency', 'Smart Contracts'],
     company: 'Blockchain Solutions',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -92,6 +98,7 @@ const mapProfessionals = [
     position: [51.508, -0.091],
     interests: ['Product Strategy', 'User Experience', 'Market Research'],
     company: 'ProductLab',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
   },
   {
@@ -101,6 +108,7 @@ const mapProfessionals = [
     position: [51.502, -0.086],
     interests: ['Network Security', 'Ethical Hacking', 'Blockchain Security'],
     company: 'SecureNet',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
   },
   {
@@ -110,6 +118,7 @@ const mapProfessionals = [
     position: [51.509, -0.094],
     interests: ['Augmented Reality', 'Virtual Reality', '3D Modeling'],
     company: 'ImmerseTech',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80',
   },
   {
@@ -119,6 +128,7 @@ const mapProfessionals = [
     position: [51.501, -0.092],
     interests: ['Internet of Things', 'Embedded Systems', 'Smart Devices'],
     company: 'ConnectedWorld',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -128,6 +138,7 @@ const mapProfessionals = [
     position: [51.506, -0.085],
     interests: ['Cloud Computing', 'Serverless Architecture', 'DevOps'],
     company: 'CloudNative',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -137,6 +148,7 @@ const mapProfessionals = [
     position: [51.510, -0.089],
     interests: ['Entrepreneurship', 'Venture Capital', 'Tech Startups'],
     company: 'NexGen Ventures',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1148&q=80',
   },
   {
@@ -146,6 +158,7 @@ const mapProfessionals = [
     position: [51.500, -0.091],
     interests: ['iOS Development', 'Android Development', 'Cross-platform Apps'],
     company: 'AppWorks',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=778&q=80',
   },
   {
@@ -155,6 +168,7 @@ const mapProfessionals = [
     position: [51.507, -0.083],
     interests: ['Investment', 'Startups', 'Technology Trends'],
     company: 'Horizon Capital',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -164,6 +178,7 @@ const mapProfessionals = [
     position: [51.503, -0.097],
     interests: ['Quantum Computing', 'Physics', 'Advanced Algorithms'],
     company: 'Quantum Labs',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -173,6 +188,7 @@ const mapProfessionals = [
     position: [51.501, -0.095],
     interests: ['Robotics', 'Automation', 'Mechanical Engineering'],
     company: 'Automation Systems',
+    distance: '20m',
     photo: 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
   {
@@ -182,15 +198,17 @@ const mapProfessionals = [
     position: [51.505, -0.082],
     interests: ['Digital Marketing', 'Social Media', 'Growth Hacking'],
     company: 'GrowthX',
+    distance: '11m',
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80',
   },
   {
     id: 17,
     name: 'Carlos Mendez',
     expertise: 'Blockchain Developer',
-    position: [51.508, -0.096],
+    position: [51.504, -0.089],
     interests: ['Blockchain', 'Cryptocurrencies', 'Smart Contracts'],
-    company: 'ChainTech',
+    company: 'Investor',
+    distance: '10m',
     photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
   },
 ];
@@ -276,7 +294,9 @@ const SetMapView = ({ center }) => {
   return null;
 };
 
+
 const MapView = () => {
+
   const [mapMode, setMapMode] = useState('outdoor');
   const [expertiseFilter, setExpertiseFilter] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -317,7 +337,7 @@ const MapView = () => {
       {/* Map Controls */}
       <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
         <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} sm={4}>
+          {/* <Grid item xs={12} sm={4}>
             <ToggleButtonGroup
               value={mapMode}
               exclusive
@@ -334,7 +354,7 @@ const MapView = () => {
                 Indoor
               </ToggleButton>
             </ToggleButtonGroup>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={8}>
             <FormControl fullWidth>
               <InputLabel id="expertise-filter-label">
@@ -403,6 +423,19 @@ const MapView = () => {
                         <Typography variant="subtitle1">{professional.name}</Typography>
                         <Typography variant="body2">{professional.expertise}</Typography>
                         <Typography variant="body2">{professional.company}</Typography>
+                        <Typography variant="body2" sx={{ 
+                          color: 'primary.main', 
+                          fontWeight: 'medium',
+                          display: 'inline-block',
+                          bgcolor: 'rgba(63, 81, 181, 0.1)',
+                          px: 1,
+                          py: 0.25,
+                          borderRadius: 1,
+                          mt: 0.5,
+                          fontSize: '0.75rem'
+                        }}>
+                          {professional.distance}
+                        </Typography>
                       </Box>
                     </Box>
                     <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -522,9 +555,22 @@ const MapView = () => {
                             primary={professional.name}
                             secondary={
                               <>
-                                {professional.expertise}
-                                <br />
-                                {professional.company}
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="body2" component="span">{professional.expertise}</Typography>
+                                  <Typography variant="body2" component="span" sx={{ 
+                                    color: 'primary.main', 
+                                    fontWeight: 'medium',
+                                    bgcolor: 'rgba(63, 81, 181, 0.1)',
+                                    px: 1,
+                                    py: 0.25,
+                                    borderRadius: 1,
+                                    fontSize: '0.75rem',
+                                    ml: 1
+                                  }}>
+                                    {professional.distance}
+                                  </Typography>
+                                </Box>
+                                <Typography variant="body2">{professional.company}</Typography>
                               </>
                             }
                           />

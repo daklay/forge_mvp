@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Container, Typography, Link, Grid } from '@mui/material';
+import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
@@ -15,9 +16,9 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
-              Conference Connect
-            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <img src={logo} alt="Conference Connect Logo" style={{ height: '40px' }} />
+            </Box>
             <Typography variant="body2" color="text.secondary">
               Networking made easy at professional events
             </Typography>
@@ -67,7 +68,7 @@ const Footer = () => {
           <Typography variant="body2" color="text.secondary" align="center">
             {'© '}
             {new Date().getFullYear()}
-            {' Conference Connect. All rights reserved.'}
+            {' All rights reserved.'}
           </Typography>
         </Box>
       </Container>

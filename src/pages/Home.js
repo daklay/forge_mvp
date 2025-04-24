@@ -29,7 +29,7 @@ const Home = () => {
       >
         <Container maxWidth="md">
           <Typography variant="h2" component="h1" gutterBottom>
-            Discover Relevant Connections at Events
+            Meet who matters now.
           </Typography>
           <Typography variant="h5" paragraph>
             A networking app for conferences, meetups, and professional events that helps attendees discover relevant people nearby.

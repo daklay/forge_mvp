@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
@@ -23,7 +24,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 // Mock user data with profile image
 const currentUser = {
-  name: 'Alex Johnson',
+  name: 'Ali Essaghir',
   photo: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
 };
 
@@ -107,38 +108,55 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-          {/* Logo for larger screens */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={RouterLink}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Conference Connect
-          </Typography>
-
-          {/* Mobile menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* Mobile menu - only visible on small screens */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
             <IconButton
               size="large"
               aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{ color: '#295bbe', mr: 1 }}
             >
               <MenuIcon />
             </IconButton>
+            
+            {/* Logo for mobile - next to menu */}
+            <Box
+              component={RouterLink}
+              to="/"
+              sx={{
+                display: { xs: 'flex', md: 'none' },
+                textDecoration: 'none',
+                alignItems: 'center',
+              }}
+            >
+              <img src={logo} alt="Conference Connect Logo" style={{ height: '90px', marginTop: '-10px', marginBottom: '-10px' }} />
+            </Box>
+          </Box>
+          
+          {/* Logo for desktop */}
+          <Box
+            component={RouterLink}
+            to="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              textDecoration: 'none',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              flexGrow: 0,
+            }}
+          >
+            <img src={logo} alt="Conference Connect Logo" style={{ height: '70px', marginTop: '5px', marginBottom: '5px' }} />
+          </Box>
+
+          {/* Menu for mobile */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -170,24 +188,6 @@ const Navbar = () => {
             </Menu>
           </Box>
 
-          {/* Logo for mobile */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={RouterLink}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Conference Connect
-          </Typography>
-
           {/* Desktop menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -196,7 +196,7 @@ const Navbar = () => {
                 component={RouterLink}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: '#295bbe', display: 'block', '&:hover': { color: '#1a3f80' } }}
               >
                 {page.title}
               </Button>
@@ -208,10 +208,10 @@ const Navbar = () => {
             <Tooltip title="Open notifications">
               <IconButton 
                 onClick={handleOpenNotificationsMenu} 
-                sx={{ p: 0, color: 'white' }}
+                sx={{ p: 0, color: '#295bbe', '&:hover': { color: '#1a3f80' } }}
                 aria-label="notifications"
               >
-                <Badge badgeContent={notifications.length} color="error" className="notification-badge">
+                <Badge badgeContent={notifications.length} sx={{ '& .MuiBadge-badge': { backgroundColor: '#295bbe', color: 'white' } }} className="notification-badge">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
@@ -258,10 +258,10 @@ const Navbar = () => {
                     sx={{ 
                       width: 40, 
                       height: 40,
-                      border: '2px solid white',
+                      border: '2px solid #295bbe',
                       cursor: 'pointer',
                       '&:hover': {
-                        boxShadow: '0 0 10px rgba(255,255,255,0.5)',
+                        boxShadow: '0 0 10px rgba(41,91,190,0.3)',
                       }
                     }}
                   />
@@ -277,8 +277,8 @@ const Navbar = () => {
                     width: 16, 
                     height: 16, 
                     borderRadius: '50%',
-                    bgcolor: 'white',
-                    color: 'primary.main',
+                    bgcolor: '#295bbe',
+                    color: 'white',
                     fontSize: 14,
                     fontWeight: 'bold'
                   }}>

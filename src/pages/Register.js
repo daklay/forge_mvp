@@ -32,14 +32,14 @@ const interestOptions = [
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    jobTitle: '',
-    company: '',
-    expertise: '',
-    interests: [],
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: 'Ali Essaghir',
+    jobTitle: 'AI Engineer',
+    company: 'Forge',
+    expertise: 'AI',
+    interests: ['AI', 'Machine Learning', 'Blockchain'],
+    email: 'ali.essaghir@forge.com',
+    password: '123456',
+    confirmPassword: '123456',
   });
 
   const [privacySettings, setPrivacySettings] = useState({
@@ -294,13 +294,13 @@ const Register = () => {
                 >
                   Connect LinkedIn
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   startIcon={<GitHubIcon />}
                   color="primary"
                 >
                   Connect GitHub
-                </Button>
+                </Button> */}
               </Stack>
             </Grid>
 
